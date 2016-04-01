@@ -11,7 +11,7 @@ public class Main extends Application{
 	public void start(Stage primaryStage) {
 		try
 		{
-			AnchorPane a=(AnchorPane)FXMLLoader.load(Main.class.getResource("Login.fxml"));
+			AnchorPane a=(AnchorPane)FXMLLoader.load(Main.class.getResource("views/Login.fxml"));
 			Scene s=new Scene(a);
 			primaryStage.setScene(s);
 			primaryStage.show();

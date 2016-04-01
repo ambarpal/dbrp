@@ -1,4 +1,4 @@
-package com.dbms.dbrp;
+package com.dbms.dbrp.controllers;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import com.dbms.dbrp.utilities.GlobalVariables;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,9 +24,9 @@ public class Login {
 	@FXML private Label login_prompt;
 	@FXML private PasswordField password;
 	@FXML private TextField username;
-	static final String DB_URL = "jdbc:mysql://localhost/";
-	static final String USER = "root";
-	static final String PASS = "<root-password>";
+	static final String DB_URL = GlobalVariables.DB_URL;
+	static final String USER = GlobalVariables.USER;
+	static final String PASS = GlobalVariables.PASS;
 	@FXML void login(ActionEvent e) throws SQLException, NoSuchAlgorithmException
 	{
 		Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
