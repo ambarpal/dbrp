@@ -4,6 +4,6 @@ To-do:<br />
 
 
 FXML files shifted to src<br />
-Login completed; Add support for popups.<br />
+Login completed; Add support for popups - done for login.<br />
 
 To run : Download and add MySQL connector to build path. Run Main.java after changing PASS to MySQL password of your system in Login.java.

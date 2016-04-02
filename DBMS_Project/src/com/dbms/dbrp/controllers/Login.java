@@ -1,5 +1,6 @@
 package com.dbms.dbrp.controllers;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -9,15 +10,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.dbms.dbrp.Main;
 import com.dbms.dbrp.utilities.GlobalVariables;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 public class Login {
 	@FXML private Button submit_button, register_button;
@@ -27,26 +34,59 @@ public class Login {
 	static final String DB_URL = GlobalVariables.DB_URL;
 	static final String USER = GlobalVariables.USER;
 	static final String PASS = GlobalVariables.PASS;
-	@FXML void login(ActionEvent e) throws SQLException, NoSuchAlgorithmException
+
+	Connection conn;
+	Statement stmt;
+	ResultSet rs;
+	int flag, count;
+	String sql, dbname, usr, pwd;
+	MessageDigest md;
+	byte byteData[];
+	StringBuffer sb;
+	Node source; 
+    Stage stage;
+
+	int initVariables() throws SQLException, NoSuchAlgorithmException
 	{
-		Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-		Statement stmt = conn.createStatement();
-		ResultSet rs = conn.getMetaData().getCatalogs();
-		int flag = 0, count = 0;
-		String sql, dbname, usr = username.getText(), pwd = password.getText();
-		MessageDigest md = MessageDigest.getInstance("SHA-256");
+		conn = DriverManager.getConnection(DB_URL, USER, PASS);
+		stmt = conn.createStatement();
+		rs = conn.getMetaData().getCatalogs();
+		flag = 0;
+		count = 0;
+		usr = username.getText();
+		pwd = password.getText();
+		md = MessageDigest.getInstance("SHA-256");
 		md.update(pwd.getBytes());
-		byte byteData[]=md.digest();
-		StringBuffer sb = new StringBuffer();
-        for(int i = 0; i < byteData.length; i++) {
-        	sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-        }
-        while(rs.next())
+		byteData = md.digest();
+		sb = new StringBuffer();
+		for(int i = 0; i < byteData.length; i++) {
+			sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+		}
+		while(rs.next())
 		{
 			dbname = rs.getString(1).trim();
 			if(dbname.equalsIgnoreCase("dbmsProject"))
 				flag = 1;
 		}
+		return flag;
+	}
+	
+	void openSearch() throws IOException
+	{
+		stage.close();
+		TabPane a = (TabPane)FXMLLoader.load(Main.class.getResource("views/Search.fxml"));
+		Scene s = new Scene(a);
+		Stage app_stage = new Stage();
+		app_stage.hide();
+		app_stage.setScene(s);
+		app_stage.show();
+	}
+	
+	@FXML void login(ActionEvent e) throws SQLException, NoSuchAlgorithmException, IOException
+	{
+		initVariables();
+		source = (Node)e.getSource();
+		stage = (Stage)source.getScene().getWindow();
 		if(flag == 0)
 		{
 			login_prompt.setText("Register yourself first");
@@ -69,10 +109,11 @@ public class Login {
 			rs = stmt.executeQuery(sql);
 			if(rs.next())
 				count = rs.getInt(1);
-			if(count == 1)	//No user with this username or password
+			if(count == 1)	//DB has user with this username
 			{
 				login_prompt.setText("Successfully logged in");
 				login_prompt.setTextFill(Color.GREEN);
+				openSearch();
 			}
 			else
 			{
@@ -81,26 +122,12 @@ public class Login {
 			}
 		}
 	}
-	@FXML void register(ActionEvent e) throws SQLException, NoSuchAlgorithmException
+	
+	@FXML void register(ActionEvent e) throws SQLException, NoSuchAlgorithmException, IOException
 	{
-		Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-		Statement stmt = conn.createStatement();
-		ResultSet rs = conn.getMetaData().getCatalogs();
-		int flag = 0, count = 0;
-		String sql, dbname, usr = username.getText(), pwd = password.getText();
-		MessageDigest md = MessageDigest.getInstance("SHA-256");
-		md.update(pwd.getBytes());
-		byte byteData[]=md.digest();
-		StringBuffer sb = new StringBuffer();
-        for(int i = 0; i < byteData.length; i++) {
-        	sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-        }
-		while(rs.next())
-		{
-			dbname = rs.getString(1).trim();
-			if(dbname.equalsIgnoreCase("dbmsProject"))
-				flag = 1;
-		}
+		initVariables();
+		source = (Node)e.getSource();
+		stage = (Stage)source.getScene().getWindow();
 		if(flag == 0)
 		{
 			sql = "CREATE DATABASE dbmsProject;";
@@ -145,6 +172,7 @@ public class Login {
 				ps.executeUpdate();
 				login_prompt.setText("Successfully registered");
 				login_prompt.setTextFill(Color.GREEN);
+				openSearch();
 			}
 			else
 			{
