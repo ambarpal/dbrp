@@ -30,7 +30,7 @@
                         <TextField fx:id="keywords" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
-                  <Button fx:id="search" layoutX="259.0" layoutY="358.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="483.0" text="Search" />
+                  <Button fx:id="search" layoutX="259.0" layoutY="358.0" mnemonicParsing="false" onAction="#searchDB" prefHeight="41.0" prefWidth="483.0" text="Search" />
                </children></AnchorPane>
       </content>
     </Tab>
@@ -51,7 +51,7 @@
                         <TextArea fx:id="query" prefHeight="63.0" prefWidth="846.0" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
-                  <Button layoutX="236.0" layoutY="177.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="505.0" text="Submit" />
+                  <Button fx:id="querySubmit" layoutX="236.0" layoutY="177.0" mnemonicParsing="false" onAction="#query_search" prefHeight="52.0" prefWidth="505.0" text="Submit" />
                </children>
             </AnchorPane>
         </content>
