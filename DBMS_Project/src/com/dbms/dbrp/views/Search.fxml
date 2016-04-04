@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dbms.dbrp.controllers.SearchUploadController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dbms.dbrp.controllers.SearchUploadController">
   <tabs>
     <Tab text="Search 1">
       <content>
@@ -98,7 +98,7 @@
                         </TextArea>
                      </children>
                   </GridPane>
-                  <Button fx:id="uploadButton" layoutX="226.0" layoutY="446.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="754.0" text="Upload Paper" />
+                  <Button fx:id="uploadButton" layoutX="226.0" layoutY="446.0" mnemonicParsing="false" onAction="#uploadPaper" prefHeight="42.0" prefWidth="754.0" text="Upload Paper" />
                   <Button fx:id="submit" layoutX="319.0" layoutY="498.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="575.0" text="Submit" />
                </children></AnchorPane>
       </content>
