@@ -17,6 +17,6 @@ public class SearchUploadController {
 	@FXML private TextArea abstract_u;
 	@FXML private TextArea citations_u;
 	@FXML void uploadPaper(ActionEvent e){
-		System.out.println("YoYo");
+		
 	}
 }
