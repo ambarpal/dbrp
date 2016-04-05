@@ -19,7 +19,9 @@ import com.dbms.dbrp.utilities.GlobalVariables;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -32,6 +34,7 @@ public class SearchUploadController {
 	@FXML private TextArea authors_u;
 	@FXML private TextArea abstract_u;
 	@FXML private TextArea citations_u;
+	@FXML private Label uploadLabel;
 	
 	Connection conn;
 	Statement stmt;
@@ -66,6 +69,11 @@ public class SearchUploadController {
 		if (file != null) {
 			if (file.toString().endsWith("pdf")) {
 				Files.copy(file.toPath(), cp.toPath());
+			}
+			else
+			{
+				uploadLabel.setText("Please choose a PDF file");
+				uploadLabel.setTextFill(Color.RED);
 			}
 		}
 	}

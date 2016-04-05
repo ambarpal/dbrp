@@ -100,6 +100,7 @@
                   </GridPane>
                   <Button fx:id="uploadButton" layoutX="226.0" layoutY="446.0" mnemonicParsing="false" onAction="#uploadPaper" prefHeight="42.0" prefWidth="754.0" text="Upload Paper" />
                   <Button fx:id="submit" layoutX="319.0" layoutY="498.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="575.0" text="Submit" />
+                  <Label fx:id="uploadLabel" layoutX="450.0" layoutY="420.0" prefHeight="15.0" prefWidth="257.0" text="Label" />
                </children></AnchorPane>
       </content>
     </Tab>
