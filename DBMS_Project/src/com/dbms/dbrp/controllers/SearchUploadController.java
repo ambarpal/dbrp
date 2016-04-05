@@ -3,6 +3,9 @@
  */
 package com.dbms.dbrp.controllers;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -55,11 +58,15 @@ public class SearchUploadController {
 		return flag;
 	}
 	
-	@FXML void uploadPaper(ActionEvent e){
-		
-		
+	@FXML void uploadPaper(ActionEvent e) throws IOException{
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Open paper");
-		fc.showOpenDialog(new Stage());
+		int count = 1;
+		File file = fc.showOpenDialog(null), cp = new File("data/" + count++ + ".pdf");
+		if (file != null) {
+			if (file.toString().endsWith("pdf")) {
+				Files.copy(file.toPath(), cp.toPath());
+			}
+		}
 	}
 }
