@@ -47,7 +47,7 @@ public class SearchUploadController {
 	Node source; 
     Stage stage;
     
-	int initVariables() throws SQLException, NoSuchAlgorithmException
+	int initVariables() throws SQLException
 	{
 		conn = DriverManager.getConnection(GlobalVariables.DB_URL, GlobalVariables.USER, GlobalVariables.PASS);
 		stmt = conn.createStatement();
@@ -60,7 +60,6 @@ public class SearchUploadController {
 		}
 		return flag;
 	}
-	
 	@FXML void uploadPaper(ActionEvent e) throws IOException{
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Open paper");
@@ -76,5 +75,26 @@ public class SearchUploadController {
 				uploadLabel.setTextFill(Color.RED);
 			}
 		}
+	}
+	@FXML void submit(ActionEvent e) throws SQLException{
+		String t = title_u.getText();
+		String[] aList = authors_u.getText().split(",");
+		String[] cList = citations_u.getText().split("\n");
+		String a = abstract_u.getText();
+		
+		initVariables();
+		stmt.executeQuery("USE dbmsProject;");
+		stmt.executeQuery("CREATE TABLE papers"
+				+"(pid integer PRIMARY KEY, "
+				+"title VARCHAR(400)"
+				+ "rank integer);");
+		stmt.executeQuery("CREATE TABLE authors"
+				+"(aid integer PRIMARY KEY, "
+				+"title VARCHAR(400)"
+				+ "rank integer);");
+		rs = stmt.executeQuery(sql);
+		if(rs.next())
+			count = rs.getInt(1);
+		
 	}
 }
