@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -19,6 +18,7 @@ import com.dbms.dbrp.utilities.GlobalVariables;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
@@ -34,7 +34,9 @@ public class SearchUploadController {
 	@FXML private TextArea authors_u;
 	@FXML private TextArea abstract_u;
 	@FXML private TextArea citations_u;
+	@FXML private TextArea conference_u;
 	@FXML private Label uploadLabel;
+	@FXML private Button submit,uploadPaper;
 	
 	Connection conn;
 	Statement stmt;
@@ -60,7 +62,10 @@ public class SearchUploadController {
 		}
 		return flag;
 	}
-	@FXML void uploadPaper(ActionEvent e) throws IOException{
+	
+	@FXML void uploadPaper(ActionEvent e) throws IOException, SQLException
+	{
+		initVariables();
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Open paper");
 		int count = 1;
@@ -76,25 +81,56 @@ public class SearchUploadController {
 			}
 		}
 	}
+	
 	@FXML void submit(ActionEvent e) throws SQLException{
-		String t = title_u.getText();
-		String[] aList = authors_u.getText().split(",");
-		String[] cList = citations_u.getText().split("\n");
-		String a = abstract_u.getText();
-		
+		String title = title_u.getText();
+		String[] authorList = authors_u.getText().split(",");
+		String[] citationList = citations_u.getText().split("\n");
+		String abstractText = abstract_u.getText();
+		String conference = conference_u.getText();
+		Boolean flag2 = (title.length()==0 || authorList.length == 0 || conference.length() == 0 || abstractText.length() == 0 ||  citationList.length == 0);
 		initVariables();
-		stmt.executeQuery("USE dbmsProject;");
-		stmt.executeQuery("CREATE TABLE papers"
-				+"(pid integer PRIMARY KEY, "
-				+"title VARCHAR(400)"
-				+ "rank integer);");
-		stmt.executeQuery("CREATE TABLE authors"
-				+"(aid integer PRIMARY KEY, "
-				+"title VARCHAR(400)"
-				+ "rank integer);");
-		rs = stmt.executeQuery(sql);
-		if(rs.next())
-			count = rs.getInt(1);
+		if(flag2 == true)
+		{
+			uploadLabel.setText("Enter all fields before submitting");
+			uploadLabel.setTextFill(Color.RED);
+		}
+		else
+		{
+			uploadLabel.setText("");
+			sql = "USE dbmsProject;";
+			stmt.executeQuery(sql);
+			rs = conn.getMetaData().getTables(null, null, "papers", null);
+//			int id=1;
+			if(!rs.next())
+			{
+				System.out.println("potato");
+				sql = "CREATE TABLE papers "
+						+"(tid INTEGER PRIMARY KEY, "
+						+"title VARCHAR(400), "
+						+"author VARCHAR(400), "
+						+"keywords VARCHAR(400), "
+						+"conference VARCHAR(400), "
+						+"citationcount INTEGER, "
+						+"citations VARCHAR(1000));"; 
+				stmt.executeUpdate(sql);
+				sql = "CREATE TABLE keywords "
+						+"(tid INTEGER PRIMARY KEY, "
+						+"word VARCHAR(40), "
+						+"frequency INTEGER);";
+				stmt.executeUpdate(sql);
+				sql = "CREATE TABLE conference "
+						+"(name VARCHAR(400) PRIMARY KEY, "
+						+"date DATE PRIMARY KEY, "
+						+"tid INTEGER);";
+				stmt.executeUpdate(sql);
+				sql = "CREATE TABLE author "
+						+"(name VARCHAR(400) PRIMARY KEY, "
+						+"affiliation VARCHAR(400), "
+						+"address VARCHAR(400);";
+				stmt.executeUpdate(sql);
+			}
+		}
 		
 	}
 }

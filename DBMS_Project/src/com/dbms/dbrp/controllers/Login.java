@@ -136,6 +136,7 @@ public class Login {
 			stmt.executeQuery(sql);
 			sql = "CREATE TABLE users "
 			+"(username VARCHAR(400) PRIMARY KEY, "
+//			+"isAdmin TINYINT, "
 			+"password VARCHAR(400));"; 
 			stmt.executeUpdate(sql);
 		}
