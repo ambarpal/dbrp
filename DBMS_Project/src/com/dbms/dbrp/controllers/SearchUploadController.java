@@ -26,6 +26,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -40,6 +41,7 @@ public class SearchUploadController {
 	@FXML private TextArea abstract_u;
 	@FXML private TextArea citations_u;
 	@FXML private TextArea conference_u;
+	@FXML private TextField date_u;
 	@FXML private Label uploadLabel;
 	@FXML private Button submit,uploadPaper;
 	
@@ -80,8 +82,12 @@ public class SearchUploadController {
 		// return kid if keyWord exists in the Database else -1
 		return -1;
 	}
-	int conferenceExists(String conference){
+	int conferenceExists(String conference, String date) throws SQLException{
 		// return cid id conference exists in the Database else -1
+		sql = "select CID from conference where name = " + conference + " and date = " + date + ";";
+		rs = stmt.executeQuery(sql);
+		if(rs.next())
+			return rs.getInt("CID");
 		return -1;
 	}
 	@FXML void uploadPaper(ActionEvent e) throws IOException, SQLException
@@ -93,7 +99,10 @@ public class SearchUploadController {
     	conference_u.setText(":'(");
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Open paper");
-		int count = Integer.parseInt(new BufferedReader(new FileReader("data/counter")).readLine().toString());
+		BufferedReader b = new BufferedReader(new FileReader("data/counter"));
+		String temp = b.readLine().toString();
+		int count = Integer.parseInt(temp);
+		b.close();
 		File file = fc.showOpenDialog(null), cp = new File("data/" + count++ + ".pdf");
 		if (file != null) {
 			if (file.toString().endsWith("pdf")) {
@@ -122,6 +131,7 @@ public class SearchUploadController {
 		String[] citationList = citations_u.getText().split("\n");
 		String abstractText = abstract_u.getText();
 		String conference = conference_u.getText();
+		String date = date_u.getText();
 		Boolean flag2 = (title.length()==0 || authorList.length == 0 || conference.length() == 0 || abstractText.length() == 0 ||  citationList.length == 0);
 		if(flag2 == true)
 		{
@@ -138,7 +148,6 @@ public class SearchUploadController {
 			sql = "USE dbmsProject;";
 			stmt.executeQuery(sql);
 			rs = conn.getMetaData().getTables(null, null, "papers", null);
-//			int id=1;
 			if(!rs.next())
 			{
 				// Tables
@@ -187,7 +196,7 @@ public class SearchUploadController {
 			}
 			
 			// Insert Paper into Paper Table
-			sql = "INSERT into paper values(" + IDGenerator.getPaperCounter()
+			sql = "INSERT into paper values( " + IDGenerator.getPaperCounter()
 					+ "," + title
 					+ "," + 0
 					+ ");";
@@ -198,14 +207,16 @@ public class SearchUploadController {
 			for (String keyWord : abstractText.split(" ")){
 				int id = keyWordExists(keyWord);
 				if (id == -1){
-					sql = "INSERT into keyword values(" + IDGenerator.getKeywordCounter()
+					sql = "INSERT into keyword values( " + IDGenerator.getKeywordCounter()
 						  + "," + keyWord + ");";
 					stmt.executeQuery(sql);
 				}
 			}
 			
 			// Insert into conference table
-			
+			sql = "INSERT into conference values( " + IDGenerator.getConferenceCounter()
+			+ " , " + conference + " , " + date + ");";
+			stmt.executeQuery(sql);
 		}
 		
 	}

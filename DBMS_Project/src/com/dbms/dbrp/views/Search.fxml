@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dbms.dbrp.controllers.SearchUploadController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dbms.dbrp.controllers.SearchUploadController">
   <tabs>
     <Tab text="Search 1">
       <content>
@@ -105,7 +105,10 @@
                            </GridPane.margin>
                         </TextArea>
                         <Label alignment="CENTER" prefHeight="53.0" prefWidth="504.0" text="Date*" textAlignment="CENTER" GridPane.rowIndex="5" />
-                        <TextField prefHeight="26.0" prefWidth="335.0" text="28/5/2015" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <TextField fx:id="date_u" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="335.0" text="28/5/2015" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                           <GridPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </GridPane.margin></TextField>
                      </children>
                   </GridPane>
                   <Button fx:id="uploadPaper" layoutX="226.0" layoutY="435.0" mnemonicParsing="false" onAction="#uploadPaper" prefHeight="42.0" prefWidth="754.0" text="Upload Paper" />

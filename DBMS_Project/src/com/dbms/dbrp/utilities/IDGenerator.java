@@ -8,6 +8,7 @@ import java.io.FileWriter;
 public class IDGenerator {
 	static int paperCounter;
 	static int keywordCounter;
+	static int conferenceCounter;
 	public static int getPaperCounter(){
 		int res = -1;
 		try{
@@ -33,6 +34,22 @@ public class IDGenerator {
 			res = keywordCounter;
 			keywordCounter++;
 			brOut.write(keywordCounter + "");
+			brIn.close();
+			brOut.close();
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		return res;
+	}
+	public static int getConferenceCounter(){
+		int res = -1;
+		try{
+			BufferedReader brIn = new BufferedReader(new FileReader("data/conferenceCounter"));
+			conferenceCounter = Integer.parseInt(brIn.readLine().toString());
+			BufferedWriter brOut = new BufferedWriter(new FileWriter("data/conferenceCounter"));
+			res = conferenceCounter;
+			conferenceCounter++;
+			brOut.write(conferenceCounter + "");
 			brIn.close();
 			brOut.close();
 		} catch(Exception e){
