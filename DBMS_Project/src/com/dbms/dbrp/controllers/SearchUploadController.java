@@ -90,6 +90,15 @@ public class SearchUploadController {
 			return rs.getInt("CID");
 		return -1;
 	}
+	int paperExists(String conference) throws SQLException
+	{
+		// return cid if paper exists, else -1
+		sql = "select CID from conference where name = " + conference + ";";
+		rs = stmt.executeQuery(sql);
+		if(rs.next())
+			return rs.getInt("CID");
+		return -1;
+	}
 	@FXML void uploadPaper(ActionEvent e) throws IOException, SQLException
 	{
     	title_u.setText(":)");
@@ -180,8 +189,8 @@ public class SearchUploadController {
 				stmt.executeUpdate(sql);
 				
 				sql = "CREATE TABLE isCitationOf "
-						+"(pid INTEGER, "
-						+"pid INTEGER);"; 
+						+"(p1_pid INTEGER, "
+						+"p2_pid INTEGER);"; 
 				stmt.executeUpdate(sql);	
 
 				sql = "CREATE TABLE isPublishedin "
@@ -194,7 +203,8 @@ public class SearchUploadController {
 						+"pid INTEGER);";
 				stmt.executeQuery(sql);
 			}
-			
+//			Insert author into author table
+			sql = "INSERT ";
 			// Insert Paper into Paper Table
 			sql = "INSERT into paper values( " + IDGenerator.getPaperCounter()
 					+ "," + title
@@ -217,6 +227,14 @@ public class SearchUploadController {
 			sql = "INSERT into conference values( " + IDGenerator.getConferenceCounter()
 			+ " , " + conference + " , " + date + ");";
 			stmt.executeQuery(sql);
+			
+			// Insert citations into relation table
+//			for (String s : citationList)
+//			{
+//				sql = "INSERT into isCitationOf values( " + 
+//				+ " , " + conference + " , " + date + ");";
+//				stmt.executeQuery(sql);
+//			}
 		}
 		
 	}
