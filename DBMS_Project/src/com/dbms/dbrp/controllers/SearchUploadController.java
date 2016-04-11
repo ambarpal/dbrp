@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.dbms.dbrp.utilities.GlobalVariables;
+import com.dbms.dbrp.utilities.IDGenerator;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -72,6 +73,17 @@ public class SearchUploadController {
 		return flag;
 	}
 	
+	void fixCitations(){
+		// Fix all citations
+	}
+	int keyWordExists(String keyword){
+		// return kid if keyWord exists in the Database else -1
+		return -1;
+	}
+	int conferenceExists(String conference){
+		// return cid id conference exists in the Database else -1
+		return -1;
+	}
 	@FXML void uploadPaper(ActionEvent e) throws IOException, SQLException
 	{
     	title_u.setText(":)");
@@ -135,11 +147,12 @@ public class SearchUploadController {
 						+"title VARCHAR(400), "
 						+"citationcount INTEGER);"; 
 				stmt.executeUpdate(sql);
+				
 				sql = "CREATE TABLE keyword "
 						+"(kid INTEGER PRIMARY KEY, "
-						+"word VARCHAR(40), "
-						+"frequency INTEGER);";
+						+"word VARCHAR(40));";
 				stmt.executeUpdate(sql);
+				
 				sql = "CREATE TABLE conference "
 						+"(cid INTEGER PRIMARY KEY, "
 						+"name VARCHAR(400), "
@@ -166,10 +179,33 @@ public class SearchUploadController {
 						+"(pid INTEGER, "
 						+"cid INTEGER);"; 
 				stmt.executeUpdate(sql);
-			}
-			else{
 				
+				sql = "CREATE TABLE isKeywordIn"
+						+"(kid INTEGER, "
+						+"pid INTEGER);";
+				stmt.executeQuery(sql);
 			}
+			
+			// Insert Paper into Paper Table
+			sql = "INSERT into paper values(" + IDGenerator.getPaperCounter()
+					+ "," + title
+					+ "," + 0
+					+ ");";
+			fixCitations();
+			stmt.executeQuery(sql);
+			
+			// Insert keywords into table
+			for (String keyWord : abstractText.split(" ")){
+				int id = keyWordExists(keyWord);
+				if (id == -1){
+					sql = "INSERT into keyword values(" + IDGenerator.getKeywordCounter()
+						  + "," + keyWord + ");";
+					stmt.executeQuery(sql);
+				}
+			}
+			
+			// Insert into conference table
+			
 		}
 		
 	}
