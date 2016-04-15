@@ -57,4 +57,20 @@ public class IDGenerator {
 		}
 		return res;
 	}
+	public static int getAuthorCounter(){
+		int res = -1;
+		try{
+			BufferedReader brIn = new BufferedReader(new FileReader("data/authorCounter"));
+			conferenceCounter = Integer.parseInt(brIn.readLine().toString());
+			BufferedWriter brOut = new BufferedWriter(new FileWriter("data/authorCounter"));
+			res = conferenceCounter;
+			conferenceCounter++;
+			brOut.write(conferenceCounter + "");
+			brIn.close();
+			brOut.close();
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		return res;
+	}
 }

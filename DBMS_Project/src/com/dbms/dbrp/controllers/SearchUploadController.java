@@ -84,8 +84,7 @@ public class SearchUploadController {
 	}
 	int conferenceExists(String conference, String date) throws SQLException{
 		// return cid id conference exists in the Database else -1
-		sql = "select CID from conference where name = " + conference + " and date = " + date + ";";
-		rs = stmt.executeQuery(sql);
+		rs = stmt.executeQuery("select CID from conference where name = " + conference + " and date = " + date + ";");
 		if(rs.next())
 			return rs.getInt("CID");
 		return -1;
@@ -93,8 +92,7 @@ public class SearchUploadController {
 	int paperExists(String conference) throws SQLException
 	{
 		// return cid if paper exists, else -1
-		sql = "select CID from conference where name = " + conference + ";";
-		rs = stmt.executeQuery(sql);
+		rs = stmt.executeQuery("select CID from conference where name = " + conference + ";");
 		if(rs.next())
 			return rs.getInt("CID");
 		return -1;
@@ -136,30 +134,32 @@ public class SearchUploadController {
 	@FXML void submit(ActionEvent e) throws SQLException{
 		System.out.println(isUploaded);
 		String title = title_u.getText();
-		String[] authorList = authors_u.getText().split(",");
+		String[] authors_affiliation = authors_u.getText().split("\n");
+		String affiliation = authors_affiliation[1];
+		String[] authorList = authors_affiliation[0].split(",");
 		String[] citationList = citations_u.getText().split("\n");
 		String abstractText = abstract_u.getText();
 		String conference = conference_u.getText();
 		String date = date_u.getText();
-		Boolean flag2 = (title.length()==0 || authorList.length == 0 || conference.length() == 0 || abstractText.length() == 0 ||  citationList.length == 0);
+		Boolean flag2 = (title.length() == 0 || authorList.length == 0 || conference.length() == 0 || abstractText.length() == 0 ||  citationList.length == 0);
 		if(flag2 == true)
 		{
 			uploadLabel.setText("Enter all fields before submitting");
 			uploadLabel.setTextFill(Color.RED);
 		}
-		else if (isUploaded.booleanValue() == false){
+		else if (isUploaded == false){
 			uploadLabel.setText("You need to submit a pdf");
 			uploadLabel.setTextFill(Color.RED);	
 		}
 		else
 		{
 			uploadLabel.setText("");
-			sql = "USE dbmsProject;";
-			stmt.executeQuery(sql);
+			stmt.executeQuery("USE dbmsProject;");
 			rs = conn.getMetaData().getTables(null, null, "papers", null);
+			System.out.println(rs.next());
 			if(!rs.next())
 			{
-				// Tables
+				// Create tables
 				sql = "CREATE TABLE papers "
 						+"(pid INTEGER PRIMARY KEY, "
 						+"title VARCHAR(400), "
@@ -201,17 +201,18 @@ public class SearchUploadController {
 				sql = "CREATE TABLE isKeywordIn"
 						+"(kid INTEGER, "
 						+"pid INTEGER);";
-				stmt.executeQuery(sql);
+				stmt.executeUpdate(sql);
 			}
-//			Insert author into author table
+
+			// Insert author into author table
 			sql = "INSERT ";
 			// Insert Paper into Paper Table
 			sql = "INSERT into paper values( " + IDGenerator.getPaperCounter()
 					+ "," + title
 					+ "," + 0
 					+ ");";
-			fixCitations();
-			stmt.executeQuery(sql);
+			// fixCitations();
+			stmt.executeUpdate(sql);
 			
 			// Insert keywords into table
 			for (String keyWord : abstractText.split(" ")){
@@ -219,7 +220,7 @@ public class SearchUploadController {
 				if (id == -1){
 					sql = "INSERT into keyword values( " + IDGenerator.getKeywordCounter()
 						  + "," + keyWord + ");";
-					stmt.executeQuery(sql);
+					stmt.executeUpdate(sql);
 				}
 			}
 			
@@ -227,6 +228,10 @@ public class SearchUploadController {
 			sql = "INSERT into conference values( " + IDGenerator.getConferenceCounter()
 			+ " , " + conference + " , " + date + ");";
 			stmt.executeQuery(sql);
+
+			// Insert into author table
+			sql = "INSERT into author values( " + IDGenerator.getAuthorCounter()
+			+ " , " + authorList + " , ";
 			
 			// Insert citations into relation table
 //			for (String s : citationList)
@@ -236,6 +241,5 @@ public class SearchUploadController {
 //				stmt.executeQuery(sql);
 //			}
 		}
-		
 	}
 }
