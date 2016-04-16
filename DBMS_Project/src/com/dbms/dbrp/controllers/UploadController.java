@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.dbms.dbrp.controllers;
 
 import java.io.BufferedReader;
@@ -33,9 +30,8 @@ import javafx.stage.Stage;
 
 /**
  * @author ambar14012, harshvardhan14043
- *
  */
-public class SearchUploadController {
+public class UploadController {
 	@FXML private TextArea title_u;
 	@FXML private TextArea authors_u;
 	@FXML private TextArea abstract_u;
@@ -57,7 +53,7 @@ public class SearchUploadController {
     Stage stage;
     Boolean isUploaded;
     
-    public SearchUploadController() throws SQLException{
+    public UploadController() throws SQLException{
     	initVariables();
 	}
 	int initVariables() throws SQLException
@@ -99,11 +95,14 @@ public class SearchUploadController {
 	}
 	@FXML void uploadPaper(ActionEvent e) throws IOException, SQLException
 	{
+		// Begin To Delete
     	title_u.setText(":)");
     	authors_u.setText("::)");
     	abstract_u.setText("::))");
     	citations_u.setText(":/");
     	conference_u.setText(":'(");
+    	// End To Delete
+
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Open paper");
 		BufferedReader b = new BufferedReader(new FileReader("data/counter"));
@@ -154,55 +153,6 @@ public class SearchUploadController {
 		else
 		{
 			uploadLabel.setText("");
-			stmt.executeQuery("USE dbmsProject;");
-			rs = conn.getMetaData().getTables(null, null, "papers", null);
-			System.out.println(rs.next());
-			if(!rs.next())
-			{
-				// Create tables
-				sql = "CREATE TABLE papers "
-						+"(pid INTEGER PRIMARY KEY, "
-						+"title VARCHAR(400), "
-						+"citationcount INTEGER);"; 
-				stmt.executeUpdate(sql);
-				
-				sql = "CREATE TABLE keyword "
-						+"(kid INTEGER PRIMARY KEY, "
-						+"word VARCHAR(40));";
-				stmt.executeUpdate(sql);
-				
-				sql = "CREATE TABLE conference "
-						+"(cid INTEGER PRIMARY KEY, "
-						+"name VARCHAR(400), "
-						+"date DATE);";
-				stmt.executeUpdate(sql);
-				sql = "CREATE TABLE author "
-						+"(aid INTEGER PRIMARY KEY, "
-						+"name VARCHAR(400), "
-						+"affiliation VARCHAR(400));";
-				stmt.executeUpdate(sql);
-				
-				// Relationships
-				sql = "CREATE TABLE isAuthorOf "
-						+"(pid INTEGER, "
-						+"aid INTEGER);"; 
-				stmt.executeUpdate(sql);
-				
-				sql = "CREATE TABLE isCitationOf "
-						+"(p1_pid INTEGER, "
-						+"p2_pid INTEGER);"; 
-				stmt.executeUpdate(sql);	
-
-				sql = "CREATE TABLE isPublishedin "
-						+"(pid INTEGER, "
-						+"cid INTEGER);"; 
-				stmt.executeUpdate(sql);
-				
-				sql = "CREATE TABLE isKeywordIn"
-						+"(kid INTEGER, "
-						+"pid INTEGER);";
-				stmt.executeUpdate(sql);
-			}
 
 			// Insert author into author table
 			sql = "INSERT ";

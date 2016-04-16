@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dbms.dbrp.controllers.ActionController">
+   <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="235.0" layoutY="14.0" prefHeight="36.0" prefWidth="131.0" text="Actions" textAlignment="CENTER">
+         <font>
+            <Font size="29.0" />
+         </font>
+      </Label>
+      <Button fx:id="search_a" layoutX="16.0" layoutY="81.0" mnemonicParsing="false" onAction="#searchAction" prefHeight="36.0" prefWidth="568.0" text="Search" />
+      <Button fx:id="upload_a" layoutX="17.0" layoutY="131.0" mnemonicParsing="false" onAction="#uploadAction" prefHeight="36.0" prefWidth="568.0" text="Upload Paper" />
+      <Button fx:id="new_auth_a" layoutX="17.0" layoutY="180.0" mnemonicParsing="false" onAction="#newAuthorAction" prefHeight="36.0" prefWidth="568.0" text="Create New Author" />
+      <Button fx:id="new_conf_a" layoutX="18.0" layoutY="232.0" mnemonicParsing="false" onAction="#newConferenceAction" prefHeight="36.0" prefWidth="568.0" text="Add New Conference" />
+   </children>
+</AnchorPane>
