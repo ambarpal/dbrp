@@ -5,8 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dbms.dbrp.controllers.ConferenceController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="631.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dbms.dbrp.controllers.ConferenceController">
    <children>
       <Label alignment="CENTER" layoutX="198.0" layoutY="30.0" prefHeight="38.0" prefWidth="213.0" text="New Conference">
          <font>
@@ -25,8 +24,10 @@
          <children>
             <Label alignment="CENTER" prefHeight="48.0" prefWidth="310.0" text="Name" />
             <Label alignment="CENTER" prefHeight="48.0" prefWidth="310.0" text="Date" GridPane.rowIndex="1" />
+            <TextField fx:id="conf_name" GridPane.columnIndex="1" />
+            <DatePicker fx:id="conf_date" prefHeight="30.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <Button fx:id="conference_submit" layoutX="207.0" layoutY="330.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="207.0" text="Submit" />
+      <Button fx:id="conference_submit" layoutX="207.0" layoutY="330.0" mnemonicParsing="false" onAction="#submitAction" prefHeight="26.0" prefWidth="207.0" text="Submit" />
    </children>
 </AnchorPane>
