@@ -9,6 +9,7 @@ public class IDGenerator {
 	static int paperCounter;
 	static int keywordCounter;
 	static int conferenceCounter;
+	static int authorCounter;
 	public static int getPaperCounter(){
 		int res = -1;
 		try{
@@ -61,11 +62,11 @@ public class IDGenerator {
 		int res = -1;
 		try{
 			BufferedReader brIn = new BufferedReader(new FileReader("data/authorCounter"));
-			conferenceCounter = Integer.parseInt(brIn.readLine().toString());
+			authorCounter = Integer.parseInt(brIn.readLine().toString());
 			BufferedWriter brOut = new BufferedWriter(new FileWriter("data/authorCounter"));
-			res = conferenceCounter;
-			conferenceCounter++;
-			brOut.write(conferenceCounter + "");
+			res = authorCounter;
+			authorCounter++;
+			brOut.write(authorCounter + "");
 			brIn.close();
 			brOut.close();
 		} catch(Exception e){

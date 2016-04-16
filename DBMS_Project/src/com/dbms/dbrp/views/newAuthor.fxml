@@ -19,11 +19,11 @@
          <children>
             <Label alignment="CENTER" prefHeight="48.0" prefWidth="310.0" text="Name" />
             <Label alignment="CENTER" prefHeight="48.0" prefWidth="310.0" text="Affiliation" GridPane.rowIndex="1" />
-            <Text fx:id="author_name" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="299.7294921875" GridPane.columnIndex="1" />
-            <Text fx:id="author_affiliation" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="299.7294921875" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="author_name" GridPane.columnIndex="1" />
+            <TextField fx:id="author_affiliation" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <Button fx:id="author_submit" layoutX="197.0" layoutY="320.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="207.0" text="Submit" />
+      <Button fx:id="author_submit" layoutX="197.0" layoutY="320.0" mnemonicParsing="false" onAction="#submitAction" prefHeight="26.0" prefWidth="207.0" text="Submit" />
       <Label alignment="CENTER" layoutX="221.0" layoutY="20.0" prefHeight="38.0" prefWidth="146.0" text="New Author">
          <font>
             <Font size="23.0" />
