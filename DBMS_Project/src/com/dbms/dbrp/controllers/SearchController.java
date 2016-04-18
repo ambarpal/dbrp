@@ -24,12 +24,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class SearchController {
 	@FXML TextField as_name;
 	@FXML TextField as_affiliation;
 	@FXML Button as_search;
+	@FXML Label as_label;
 
     private TableView<Author> table;
     private final ObservableList<Author> data = FXCollections.observableArrayList();
@@ -39,7 +41,23 @@ public class SearchController {
 		stmt.executeQuery("USE dbmsProject;");
 		
 		// TODO: Improve the query to handle empty name field or empty affiliation field
-		ResultSet rs = stmt.executeQuery("select * from author where name like '" + as_name.getText() + "%' or affiliation like '" + as_affiliation.getText() + "%';");
+		ResultSet rs = null;
+		String authorname = as_name.getText();
+		String affiliationname = as_affiliation.getText();
+		if(authorname.length() == 0 || affiliationname.length() == 0)
+		{
+			as_label.setText("Enter at least one search field");
+			as_label.setTextFill(Color.RED);
+		}
+		else
+		{
+			if(authorname.length() != 0 && affiliationname.length() != 0)
+				rs = stmt.executeQuery("select * from author where name like '" + as_name.getText() + "%' and affiliation like '" + as_affiliation.getText() + "%';");
+			else if(authorname.length() != 0)
+				rs = stmt.executeQuery("select * from author where name like '" + as_name.getText() + "%';");
+			else
+				rs = stmt.executeQuery("select * from author where affiliation like '" + as_affiliation.getText() + "%';");
+		}
 		
 		data.clear();
 		while (rs.next()){
