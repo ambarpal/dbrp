@@ -20,7 +20,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -32,8 +31,7 @@ public class SearchController {
 	@FXML Button as_search;
 	@FXML Label as_label;
 
-    private TableView<Author> table;
-    private final ObservableList<Author> data = FXCollections.observableArrayList();
+    static final ObservableList<Author> data = FXCollections.observableArrayList();
 	@FXML void as_search_action(ActionEvent e) throws SQLException, IOException{
 		Connection conn = DriverManager.getConnection(GlobalVariables.DB_URL, GlobalVariables.USER, GlobalVariables.PASS);
 		Statement stmt = conn.createStatement();
@@ -51,14 +49,14 @@ public class SearchController {
 		{
 			as_label.setText("");
 			if(authorname.length() != 0 && affiliationname.length() != 0)
-				rs = stmt.executeQuery("select * from author where name like '" + as_name.getText() + "%' and affiliation like '" + as_affiliation.getText() + "%';");
+				rs = stmt.executeQuery("select * from author where name like '%" + as_name.getText() + "%' and affiliation like '%" + as_affiliation.getText() + "%';");
 			else if(authorname.length() != 0)
-				rs = stmt.executeQuery("select * from author where name like '" + as_name.getText() + "%';");
+				rs = stmt.executeQuery("select * from author where name like '%" + as_name.getText() + "%';");
 			else
-				rs = stmt.executeQuery("select * from author where affiliation like '" + as_affiliation.getText() + "%';");
+				rs = stmt.executeQuery("select * from author where affiliation like '%" + as_affiliation.getText() + "%';");
 			data.clear();
 			while (rs.next()){
-				// System.out.println(rs.getString("aid") + rs.getString("name") + rs.getString("affiliation"));
+//				System.out.println(rs.getString("aid") + rs.getString("name") + rs.getString("affiliation"));
 				data.add(new Author(Integer.parseInt(rs.getString("aid")), rs.getString("name"), rs.getString("affiliation")));
 			}
 			flag=1;
@@ -70,8 +68,6 @@ public class SearchController {
 	}
 	
 	void displayAuthors() throws IOException {
-		// TODO: Instead of creating this by code, make a new fxml 
-		// containing the empty table and load it here
 		
 		AnchorPane a = (AnchorPane)FXMLLoader.load(Main.class.getResource("views/SearchResults.fxml"));
 		Scene s = new Scene(a);
@@ -80,36 +76,7 @@ public class SearchController {
 		app_stage.setTitle("Query Results");
 		app_stage.setScene(s);
 		app_stage.show();
-        table = new TableView<Author>();
-        table.setEditable(false);
-//        TableColumn aidColumn = new TableColumn("Author ID");
-//        aidColumn.setMinWidth(100);
-//        aidColumn.setCellValueFactory(
-//                new PropertyValueFactory<Author, Integer>("aid"));
-// 
-//        TableColumn nameColumn = new TableColumn("Author Name");
-//        nameColumn.setMinWidth(100);
-//        nameColumn.setCellValueFactory(
-//                new PropertyValueFactory<Author, String>("name"));
-// 
-//        TableColumn affiliationColumn = new TableColumn("Affiliation");
-//        affiliationColumn.setMinWidth(200);
-//        affiliationColumn.setCellValueFactory(
-//                new PropertyValueFactory<Author, String>("affiliation"));
-// 
-//        table.setItems(data);
-//        table.getColumns().addAll(aidColumn, nameColumn, affiliationColumn);
-// 
-//        final VBox vbox = new VBox();
-//        vbox.setSpacing(5);
-//        vbox.setPadding(new Insets(10, 0, 0, 10));
-//        vbox.getChildren().addAll(label, table);
-// 
-//        ((Group) scene.getRoot()).getChildren().addAll(vbox);
-// 
-//        stage.setScene(scene);
-//        stage.show();
-    }
+	}
  
     public static class Author {
     	private SimpleIntegerProperty aid;

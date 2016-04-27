@@ -76,6 +76,7 @@ public class LoginController {
 		Stage app_stage = new Stage();
 		app_stage.hide();
 		app_stage.setScene(s);
+		app_stage.setTitle("Actions");
 		app_stage.show();
 	}
 	

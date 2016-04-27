@@ -20,6 +20,7 @@ public class ActionController {
 		Stage app_stage = new Stage();
 		app_stage.hide();
 		app_stage.setScene(s);
+		app_stage.setTitle("Search");
 		app_stage.show();
 	}
 
@@ -29,6 +30,7 @@ public class ActionController {
 		Stage app_stage = new Stage();
 		app_stage.hide();
 		app_stage.setScene(s);
+		app_stage.setTitle("Upload");
 		app_stage.show();
 	}
 	@FXML void newAuthorAction(ActionEvent e) throws IOException{
@@ -37,6 +39,7 @@ public class ActionController {
 		Stage app_stage = new Stage();
 		app_stage.hide();
 		app_stage.setScene(s);
+		app_stage.setTitle("New Author");
 		app_stage.show();
 	}
 	@FXML void newConferenceAction(ActionEvent e) throws IOException{
@@ -45,6 +48,7 @@ public class ActionController {
 		Stage app_stage = new Stage();
 		app_stage.hide();
 		app_stage.setScene(s);
+		app_stage.setTitle("New Conference");
 		app_stage.show();
 	}
 }

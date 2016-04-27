@@ -14,6 +14,7 @@ public class Main extends Application{
 			AnchorPane a = (AnchorPane)FXMLLoader.load(Main.class.getResource("views/Login.fxml"));
 			Scene s = new Scene(a);
 			primaryStage.setScene(s);
+			primaryStage.setTitle("Login to DBRP");
 			primaryStage.show();
 		}
 		catch(Exception e){
