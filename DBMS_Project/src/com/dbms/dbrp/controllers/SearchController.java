@@ -39,7 +39,6 @@ public class SearchController {
 		ResultSet rs = null;
 		String authorname = as_name.getText();
 		String affiliationname = as_affiliation.getText();
-		int flag = 0;
 		if(authorname.length() == 0 && affiliationname.length() == 0)
 		{
 			as_label.setText("Enter at least one search field");
@@ -59,9 +58,6 @@ public class SearchController {
 //				System.out.println(rs.getString("aid") + rs.getString("name") + rs.getString("affiliation"));
 				data.add(new Author(Integer.parseInt(rs.getString("aid")), rs.getString("name"), rs.getString("affiliation")));
 			}
-			flag=1;
-		}
-		if(flag == 1){
 			displayAuthors();
 		}
 		conn.close();

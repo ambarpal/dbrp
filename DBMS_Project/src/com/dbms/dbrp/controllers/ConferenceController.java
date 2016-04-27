@@ -24,16 +24,19 @@ public class ConferenceController {
 		Connection conn = DriverManager.getConnection(GlobalVariables.DB_URL, GlobalVariables.USER, GlobalVariables.PASS);
 		Statement stmt = conn.createStatement();
 		stmt.executeQuery("USE dbmsProject;");
-		ResultSet rs = stmt.executeQuery("select count(*) from conference where name = " + conf_name.getText() + " and date = " + conf_date.getValue().toString() + ");");
-		if(!rs.next())
+		ResultSet rs = stmt.executeQuery("select count(*) as count from conference where name = '" + conf_name.getText() + "' and date = '" + conf_date.getValue().toString() + "');");
+		if(rs.next())
 		{
-			stmt.executeUpdate("INSERT INTO conference (cid, name, date) VALUES (" + IDGenerator.getConferenceCounter() + ",'" + conf_name.getText() + "','" + conf_date.getValue().toString() + "');");
-			clabel.setText("");
-		}
-		else
-		{
-			clabel.setText("Conference with same date already exists");
-			clabel.setTextFill(Color.RED);
+			if(rs.getInt("count") == 0)
+			{
+				stmt.executeUpdate("INSERT INTO conference (cid, name, date) VALUES (" + IDGenerator.getConferenceCounter() + ",'" + conf_name.getText() + "','" + conf_date.getValue().toString() + "');");
+				clabel.setText("");
+			}
+			else
+			{
+				clabel.setText("Conference with same date already exists");
+				clabel.setTextFill(Color.RED);
+			}
 		}
 		conn.close();
 	}

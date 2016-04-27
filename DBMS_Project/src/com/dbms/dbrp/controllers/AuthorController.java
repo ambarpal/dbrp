@@ -23,16 +23,19 @@ public class AuthorController {
 		Connection conn = DriverManager.getConnection(GlobalVariables.DB_URL, GlobalVariables.USER, GlobalVariables.PASS);
 		Statement stmt = conn.createStatement();
 		stmt.executeQuery("USE dbmsProject;");
-		ResultSet rs = stmt.executeQuery("SELECT count(*) from author where name = " + author_name.getText() + " and affiliation = " + author_affiliation.getText() + ";");
-		if(rs.next()==false)
+		ResultSet rs = stmt.executeQuery("SELECT count(*) as count from author where name = '" + author_name.getText() + "' and affiliation = '" + author_affiliation.getText() + "';");
+		if(rs.next())
 		{
-			alabel.setText("");
-			stmt.executeUpdate("INSERT INTO author (aid, name, affiliation) VALUES (" + IDGenerator.getAuthorCounter() + ",'" + author_name.getText() + "','" + author_affiliation.getText() + "');");
-		}
-		else
-		{
-			alabel.setText("Author with same affiliation already exists");
-			alabel.setTextFill(Color.RED);
+			if(rs.getInt("count") == 0)
+			{
+				alabel.setText("");
+				stmt.executeUpdate("INSERT INTO author (aid, name, affiliation) VALUES (" + IDGenerator.getAuthorCounter() + ",'" + author_name.getText() + "','" + author_affiliation.getText() + "');");
+			}
+			else
+			{
+				alabel.setText("Author with same affiliation already exists");
+				alabel.setTextFill(Color.RED);
+			}
 		}
 		conn.close();
 	}
