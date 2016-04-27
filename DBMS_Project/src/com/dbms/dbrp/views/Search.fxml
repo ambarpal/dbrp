@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dbms.dbrp.controllers.SearchController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dbms.dbrp.controllers.SearchController">
   <tabs>
     <Tab text="Paper Search">
       <content>
@@ -55,7 +55,7 @@
                      </children>
                   </GridPane>
                   <Button fx:id="as_search" layoutX="260.0" layoutY="377.0" mnemonicParsing="false" onAction="#as_search_action" prefHeight="41.0" prefWidth="483.0" text="Search" />
-                  <Label fx:id="as_label" layoutX="260.0" layoutY="328.0" prefHeight="24.0" prefWidth="483.0" />
+                  <Label fx:id="as_label" layoutX="260.0" layoutY="328.0" prefHeight="24.0" prefWidth="483.0" textAlignment="CENTER" />
                </children>
             </AnchorPane>
          </content>

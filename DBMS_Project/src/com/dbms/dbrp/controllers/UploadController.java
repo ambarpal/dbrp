@@ -134,7 +134,7 @@ public class UploadController {
 		System.out.println(isUploaded);
 		String title = title_u.getText();
 		String[] authors_affiliation = authors_u.getText().split("\n");
-		String affiliation = authors_affiliation[1];
+//		String affiliation = authors_affiliation[1];
 		String[] authorList = authors_affiliation[0].split(",");
 		String[] citationList = citations_u.getText().split("\n");
 		String abstractText = abstract_u.getText();

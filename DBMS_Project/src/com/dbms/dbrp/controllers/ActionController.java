@@ -15,9 +15,6 @@ import javafx.stage.Stage;
 public class ActionController {
 	
 	@FXML void searchAction(ActionEvent e) throws IOException{
-//		Node source = (Node)e.getSource();
-//		Stage stage = (Stage)source.getScene().getWindow();
-//		stage.close();
 		TabPane a = (TabPane)FXMLLoader.load(Main.class.getResource("views/Search.fxml"));
 		Scene s = new Scene(a);
 		Stage app_stage = new Stage();
