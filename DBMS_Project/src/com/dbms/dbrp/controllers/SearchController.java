@@ -12,6 +12,8 @@ import com.dbms.dbrp.utilities.GlobalVariables;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -39,6 +41,7 @@ public class SearchController {
 	@FXML Label as_label;
 	@FXML Label alabel;
 	@FXML Label plabel;
+	@FXML TextArea res;
 
     static final ObservableList<Author> data = FXCollections.observableArrayList();
     static final ObservableList<Author> raw_data = FXCollections.observableArrayList();
@@ -73,18 +76,36 @@ public class SearchController {
 	
 	@FXML void rs_search_action(ActionEvent e) throws SQLException, IOException
 	{
+		res.setVisible(true);
+		res.textProperty().addListener(new ChangeListener<Object>() {
+		    @Override
+		    public void changed(ObservableValue<?> observable, Object oldValue,
+		            Object newValue) {
+		        res.setScrollTop(Double.MAX_VALUE);
+		    }
+		});
 		Connection conn = DriverManager.getConnection(GlobalVariables.DB_URL, GlobalVariables.USER, GlobalVariables.PASS);
 		Statement stmt = conn.createStatement();
 		stmt.executeQuery("USE dbmsProject;");
 		String rs_query_str = rs_query.getText();
 		ResultSet rs = stmt.executeQuery(rs_query_str);
+		String resString = "";
+		resString += "\t\t\t";
+		for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++)
+			resString += rs.getMetaData().getColumnName(i).toString() + "\t\t\t";
+		resString += "\n";
+		Integer lineNo = 1;
 		while(rs.next())
 		{
 			int cols = rs.getMetaData().getColumnCount();
-			for(int i = 0;i < cols;i++)
-				System.out.print(rs.getString(i + 1) + " ");
-			System.out.print("\n");
+			resString += lineNo.toString() + "\t\t\t";
+			lineNo += 1;
+			for(int i = 0;i < cols; i++)
+				resString += rs.getString(i + 1) + "\t\t\t";
+			resString += "\n";
 		}
+		res.setText(resString);
+		res.appendText("");
 		conn.close();
 	}
 	
@@ -102,8 +123,18 @@ public class SearchController {
 		{
 			Connection conn = DriverManager.getConnection(GlobalVariables.DB_URL, GlobalVariables.USER, GlobalVariables.PASS);
 			Statement stmt = conn.createStatement();
+			ResultSet rs = null;
 			stmt.executeQuery("USE dbmsProject;");
-
+			if(author.length() != 0)
+			{
+				if(author.matches("0-9")){
+					rs = stmt.executeQuery("SELECT * from author where aid = " + author + ";");
+				}
+				else
+				{
+					rs = stmt.executeQuery("SELECT * from author where name like '%" + author + "%';");
+				}
+			}
 			conn.close();
 		}
 	}

@@ -13,6 +13,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import com.dbms.dbrp.utilities.GlobalVariables;
 import com.dbms.dbrp.utilities.IDGenerator;
@@ -23,7 +24,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -34,10 +34,8 @@ import javafx.stage.Stage;
 public class UploadController {
 	@FXML private TextArea title_u;
 	@FXML private TextArea authors_u;
-	@FXML private TextArea abstract_u;
 	@FXML private TextArea citations_u;
 	@FXML private TextArea conference_u;
-	@FXML private TextField date_u;
 	@FXML private Label uploadLabel;
 	@FXML private Button submit,uploadPaper;
 	
@@ -71,13 +69,26 @@ public class UploadController {
 		return flag;
 	}
 	
-	void fixCitations(){
+	void fixCitations() throws SQLException{
 		// Fix all citations
+		rs = stmt.executeQuery("SELECT distinct p1_pid from isCitationOf;");
+		ArrayList<String> p1 = new ArrayList<>();
+		while(rs.next())
+			p1.add(rs.getString(1));
+		int count=0;
+		for(int i=0;i<p1.size();i++)
+		{
+			rs = stmt.executeQuery("SELECT count(*) as count from isCitationOf where p1_pid = " + p1.get(i) + ";");
+			if(rs.next())
+				count = rs.getInt("count");
+			stmt.executeUpdate("UPDATE papers set citationCount = " + count + " where pid = " + p1.get(i) + ";");
+		}
 	}
-	int keyWordExists(String keyword){
-		// return kid if keyWord exists in the Database else -1
-		return -1;
-	}
+//	int keyWordExists(String keyword){
+//		// return kid if keyWord exists in the Database else -1
+//		
+//		return -1;
+//	}
 	int conferenceExists(String conference, String date) throws SQLException{
 		// return cid id conference exists in the Database else -1
 		rs = stmt.executeQuery("select cid from conference where name = " + conference + " and cdate = " + date + ";");
@@ -95,12 +106,12 @@ public class UploadController {
 	}
 	@FXML void uploadPaper(ActionEvent e) throws IOException, SQLException
 	{
+		System.out.println(conn.toString());
 		// Begin To Delete
-    	title_u.setText(":)");
-    	authors_u.setText("::)");
-    	abstract_u.setText("::))");
-    	citations_u.setText(":/");
-    	conference_u.setText(":'(");
+    	title_u.setText("ASDJFHDSAHfkahsdjfhsdakjhfjasdkjfhakdjsgfkdakjs");
+    	authors_u.setText("1,2");
+    	citations_u.setText("3,4,5");
+    	conference_u.setText("10");
     	// End To Delete
 
 		FileChooser fc = new FileChooser();
@@ -131,64 +142,60 @@ public class UploadController {
 	}
 	
 	@FXML void submit(ActionEvent e) throws SQLException{
+		System.out.println(conn.toString());
 		System.out.println(isUploaded);
 		String title = title_u.getText();
-		String[] authors_affiliation = authors_u.getText().split("\n");
-//		String affiliation = authors_affiliation[1];
-		String[] authorList = authors_affiliation[0].split(",");
-		String[] citationList = citations_u.getText().split("\n");
-		String abstractText = abstract_u.getText();
+		String[] authorIds = authors_u.getText().split(",");
+		String[] citationIds = citations_u.getText().split(",");
 		String conference = conference_u.getText();
-		String date = date_u.getText();
-		Boolean flag2 = (title.length() == 0 || authorList.length == 0 || conference.length() == 0 || abstractText.length() == 0 ||  citationList.length == 0);
-		if(flag2 == true)
+		Boolean flag2 = (title.length() == 0 || authorIds.length == 0 || conference.length() == 0 ||  citationIds.length == 0);
+		stmt.execute("USE dbmsProject");
+		if(flag2)
 		{
 			uploadLabel.setText("Enter all fields before submitting");
 			uploadLabel.setTextFill(Color.RED);
 		}
-		else if (isUploaded == false){
+		else if (!isUploaded){
 			uploadLabel.setText("You need to submit a pdf");
 			uploadLabel.setTextFill(Color.RED);	
 		}
 		else
 		{
 			uploadLabel.setText("");
-
-			// Insert author into author table
-			sql = "INSERT ";
+			
 			// Insert Paper into Paper Table
-			sql = "INSERT into paper values( " + IDGenerator.getPaperCounter()
-					+ "," + title
-					+ "," + 0
-					+ ");";
-			// fixCitations();
+			int paperId = IDGenerator.getPaperCounter();
+			sql = "INSERT into papers values( " + paperId + " , '" + title + "' , " + 0 + " );";
+//			System.out.println(sql);
+			
+			fixCitations();
+//			System.out.println(conn.toString());
+//			System.out.println(stmt.toString());
 			stmt.executeUpdate(sql);
 			
 			// Insert keywords into table
-			for (String keyWord : abstractText.split(" ")){
-				int id = keyWordExists(keyWord);
-				if (id == -1){
-					sql = "INSERT into keyword values( " + IDGenerator.getKeywordCounter()
-						  + "," + keyWord + ");";
-					stmt.executeUpdate(sql);
-				}
-			}
+//			for (String keyWord : abstractText.split(" ")){
+//				int id = keyWordExists(keyWord);
+//				if (id == -1){
+//					sql = "INSERT into keyword values( " + IDGenerator.getKeywordCounter()
+//						  + "," + keyWord + ");";
+//					stmt.executeUpdate(sql);
+//				}
+//			}
 			
-			// Insert into conference table
-			sql = "INSERT into conference values( " + IDGenerator.getConferenceCounter()
-			+ " , " + conference + " , " + date + ");";
-			stmt.executeQuery(sql);
-
-			// Insert into author table
-			sql = "INSERT into author values( " + IDGenerator.getAuthorCounter()
-			+ " , " + authorList + " , ";
+			// Update isAuthorOf
+			for (String s : authorIds) stmt.executeUpdate("INSERT into isAuthorOf values( " + Integer.parseInt(s) + " , " + paperId + ");");
 			
-			// Insert citations into relation table
-//			for (String s : citationList)
-//			{
-//				sql = "INSERT into isCitationOf values( " + 
-//				+ " , " + conference + " , " + date + ");";
-//				stmt.executeQuery(sql);
+			// Update isCitationOf
+			for (String s: citationIds) stmt.executeUpdate("INSERT into isCitationOf values( " + Integer.parseInt(s) + " , " + paperId + ");");
+			
+			// Update isPublishedIn
+			stmt.executeUpdate("INSERT into isPublishedIn values( " + paperId + " , " + Integer.parseInt(conference) + ");");
+			
+			// Update isKeywordIn
+//			for (String keyWord : abstractText.split(" ")){
+//				int id = keyWordExists(keyWord);
+//				stmt.executeUpdate("INSERT into isKeywordIn values( " + id + " , " + paperId + ");");
 //			}
 		}
 	}

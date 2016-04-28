@@ -208,14 +208,14 @@ public class LoginController {
 				rs = conn.getMetaData().getTables("dbmsProject", null, "isAuthorOf", null);
 				if (!rs.next())	stmt.executeUpdate("CREATE TABLE isAuthorOf (pid INTEGER, aid INTEGER);");
 				
-				rs = conn.getMetaData().getTables("dbmsProject", null, "isAuthorOf", null);
+				rs = conn.getMetaData().getTables("dbmsProject", null, "isCitationOf", null);
 				if (!rs.next())	stmt.executeUpdate("CREATE TABLE isCitationOf (p1_pid INTEGER, p2_pid INTEGER);");
 
-				rs = conn.getMetaData().getTables("dbmsProject", null, "isAuthorOf", null);
-				if (!rs.next())	stmt.executeUpdate("CREATE TABLE isPublishedin (pid INTEGER, cid INTEGER);"); 
+				rs = conn.getMetaData().getTables("dbmsProject", null, "isPublishedIn", null);
+				if (!rs.next())	stmt.executeUpdate("CREATE TABLE isPublishedIn (pid INTEGER, cid INTEGER);"); 
 
-				rs = conn.getMetaData().getTables("dbmsProject", null, "isAuthorOf", null);
-				if (!rs.next())	stmt.executeUpdate("CREATE TABLE isKeywordIn (kid INTEGER, pid INTEGER);");
+//				rs = conn.getMetaData().getTables("dbmsProject", null, "isKeywordIn", null);
+//				if (!rs.next())	stmt.executeUpdate("CREATE TABLE isKeywordIn (kid INTEGER, pid INTEGER);");
 
 				openActions();
 			}
