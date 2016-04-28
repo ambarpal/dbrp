@@ -11,6 +11,7 @@ import com.dbms.dbrp.utilities.IDGenerator;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -31,11 +32,13 @@ public class ConferenceController {
 			{
 				stmt.executeUpdate("INSERT INTO conference (cid, name, cdate) VALUES (" + IDGenerator.getConferenceCounter() + ",'" + conf_name.getText() + "','" + conf_date.getValue().toString() + "');");
 				clabel.setText("Conference successfully added");
+				clabel.setAlignment(Pos.CENTER);
 				clabel.setTextFill(Color.GREEN);
 			}
 			else
 			{
 				clabel.setText("Conference with same date already exists");
+				clabel.setAlignment(Pos.CENTER);
 				clabel.setTextFill(Color.RED);
 			}
 		}

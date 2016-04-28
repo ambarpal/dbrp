@@ -16,6 +16,7 @@ import com.dbms.dbrp.utilities.GlobalVariables;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -88,6 +89,7 @@ public class LoginController {
 		if(flag == 0)
 		{
 			login_prompt.setText("Register yourself first");
+			login_prompt.setAlignment(Pos.CENTER);
 			login_prompt.setTextFill(Color.RED);
 		}
 		else
@@ -98,6 +100,7 @@ public class LoginController {
 		if(usr.length() == 0 || pwd.length() == 0)
 		{
 			login_prompt.setText("Please enter a username/password");
+			login_prompt.setAlignment(Pos.CENTER);
 			login_prompt.setTextFill(Color.RED);
 		}
 		else if(flag != 0)
@@ -110,6 +113,7 @@ public class LoginController {
 			if(count == 1)	//DB has user with this username
 			{
 				login_prompt.setText("Successfully logged in");
+				login_prompt.setAlignment(Pos.CENTER);
 				login_prompt.setTextFill(Color.GREEN);
 				stmt.executeQuery("USE dbmsProject;");
 
@@ -144,6 +148,7 @@ public class LoginController {
 			else
 			{
 				login_prompt.setText("Invalid credentials");
+				login_prompt.setAlignment(Pos.CENTER);
 				login_prompt.setTextFill(Color.RED);
 			}
 		}
@@ -163,11 +168,13 @@ public class LoginController {
 		if(usr.length() == 0 || pwd.length() == 0)
 		{
 			login_prompt.setText("Please enter a username/password");
+			login_prompt.setAlignment(Pos.CENTER);
 			login_prompt.setTextFill(Color.RED);
 		}
 		else if(pwd.length()<6)
 		{
 			login_prompt.setText("Password should be at least 6 characters");
+			login_prompt.setAlignment(Pos.CENTER);
 			login_prompt.setTextFill(Color.RED);
 		}
 		else
@@ -187,6 +194,7 @@ public class LoginController {
 				ps.setString(2, pwd);
 				ps.executeUpdate();
 				login_prompt.setText("Successfully registered");
+				login_prompt.setAlignment(Pos.CENTER);
 				login_prompt.setTextFill(Color.GREEN);
 
 				stmt.executeQuery("USE dbmsProject;");
@@ -222,6 +230,7 @@ public class LoginController {
 			else
 			{
 				login_prompt.setText("Choose a different username");
+				login_prompt.setAlignment(Pos.CENTER);
 				login_prompt.setTextFill(Color.RED);
 			}
 		}
