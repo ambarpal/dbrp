@@ -130,13 +130,13 @@ public class LoginController {
 				rs = conn.getMetaData().getTables("dbmsProject", null, "isAuthorOf", null);
 				if (!rs.next())	stmt.executeUpdate("CREATE TABLE isAuthorOf (pid INTEGER, aid INTEGER);");
 				
-				rs = conn.getMetaData().getTables("dbmsProject", null, "isAuthorOf", null);
+				rs = conn.getMetaData().getTables("dbmsProject", null, "isCitationOf", null);
 				if (!rs.next())	stmt.executeUpdate("CREATE TABLE isCitationOf (p1_pid INTEGER, p2_pid INTEGER);");
 
-				rs = conn.getMetaData().getTables("dbmsProject", null, "isAuthorOf", null);
-				if (!rs.next())	stmt.executeUpdate("CREATE TABLE isPublishedin (pid INTEGER, cid INTEGER);"); 
+				rs = conn.getMetaData().getTables("dbmsProject", null, "isPublishedIn", null);
+				if (!rs.next())	stmt.executeUpdate("CREATE TABLE isPublishedIn (pid INTEGER, cid INTEGER);"); 
 
-				rs = conn.getMetaData().getTables("dbmsProject", null, "isAuthorOf", null);
+				rs = conn.getMetaData().getTables("dbmsProject", null, "isKeywordIn", null);
 				if (!rs.next())	stmt.executeUpdate("CREATE TABLE isKeywordIn (kid INTEGER, pid INTEGER);");
 
 				openActions();
@@ -157,13 +157,6 @@ public class LoginController {
 		
 		if(flag == 0) stmt.executeUpdate("CREATE DATABASE dbmsProject;");
 		stmt.executeQuery("USE dbmsProject;");
-		
-		// System.out.println("Ye");
-		// ResultSet resultSet = conn.getMetaData().getTables("dbmsProject", null, "%", null);
-		// while(resultSet.next())
-		//     System.out.println(resultSet.getString("TABLE_NAME"));
-		// System.out.println("Ye2");
-		
 		rs = conn.getMetaData().getTables("dbmsProject", null, "users", null);
 		if (!rs.next()) stmt.executeUpdate("CREATE TABLE users (username VARCHAR(400) PRIMARY KEY, password VARCHAR(400));");
 

@@ -27,12 +27,18 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class SearchController {
+	@FXML TextArea rs_query;
 	@FXML TextField as_name;
 	@FXML TextField as_affiliation;
-	@FXML TextArea rs_query;
+	@FXML TextField ps_author;
+	@FXML TextField ps_title;
+	@FXML TextField ps_keywords;
 	@FXML Button as_search;
 	@FXML Button raw_search;
+	@FXML Button search;
 	@FXML Label as_label;
+	@FXML Label alabel;
+	@FXML Label plabel;
 
     static final ObservableList<Author> data = FXCollections.observableArrayList();
     static final ObservableList<Author> raw_data = FXCollections.observableArrayList();
@@ -58,10 +64,8 @@ public class SearchController {
 			else
 				rs = stmt.executeQuery("select * from author where affiliation like '%" + as_affiliation.getText() + "%';");
 			data.clear();
-			while (rs.next()){
-//				System.out.println(rs.getString("aid") + rs.getString("name") + rs.getString("affiliation"));
+			while (rs.next())
 				data.add(new Author(Integer.parseInt(rs.getString("aid")), rs.getString("name"), rs.getString("affiliation")));
-			}
 			displayAuthors();
 		}
 		conn.close();
@@ -82,6 +86,26 @@ public class SearchController {
 			System.out.print("\n");
 		}
 		conn.close();
+	}
+	
+	@FXML void ps_search_action(ActionEvent e) throws SQLException
+	{
+		String author = ps_author.getText();
+		String title = ps_title.getText();
+		String[] keywords = ps_keywords.getText().split(" ");
+		if(author.length() == 0 && title.length() == 0 && keywords.length == 0)
+		{
+			plabel.setText("Enter at least one field");
+			plabel.setTextFill(Color.RED);
+		}
+		else
+		{
+			Connection conn = DriverManager.getConnection(GlobalVariables.DB_URL, GlobalVariables.USER, GlobalVariables.PASS);
+			Statement stmt = conn.createStatement();
+			stmt.executeQuery("USE dbmsProject;");
+
+			conn.close();
+		}
 	}
 	
 	void displayAuthors() throws IOException {
