@@ -80,17 +80,17 @@ public class UploadController {
 	}
 	int conferenceExists(String conference, String date) throws SQLException{
 		// return cid id conference exists in the Database else -1
-		rs = stmt.executeQuery("select CID from conference where name = " + conference + " and date = " + date + ";");
+		rs = stmt.executeQuery("select cid from conference where name = " + conference + " and cdate = " + date + ";");
 		if(rs.next())
-			return rs.getInt("CID");
+			return rs.getInt("cid");
 		return -1;
 	}
 	int paperExists(String conference) throws SQLException
 	{
 		// return cid if paper exists, else -1
-		rs = stmt.executeQuery("select CID from conference where name = " + conference + ";");
+		rs = stmt.executeQuery("select cid from conference where name = " + conference + ";");
 		if(rs.next())
-			return rs.getInt("CID");
+			return rs.getInt("cid");
 		return -1;
 	}
 	@FXML void uploadPaper(ActionEvent e) throws IOException, SQLException

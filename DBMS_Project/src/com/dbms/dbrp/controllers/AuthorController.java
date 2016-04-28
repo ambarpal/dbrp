@@ -28,7 +28,8 @@ public class AuthorController {
 		{
 			if(rs.getInt("count") == 0)
 			{
-				alabel.setText("");
+				alabel.setText("Author successfully added");
+				alabel.setTextFill(Color.GREEN);
 				stmt.executeUpdate("INSERT INTO author (aid, name, affiliation) VALUES (" + IDGenerator.getAuthorCounter() + ",'" + author_name.getText() + "','" + author_affiliation.getText() + "');");
 			}
 			else

@@ -20,6 +20,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -28,10 +29,13 @@ import javafx.stage.Stage;
 public class SearchController {
 	@FXML TextField as_name;
 	@FXML TextField as_affiliation;
+	@FXML TextArea rs_query;
 	@FXML Button as_search;
+	@FXML Button raw_search;
 	@FXML Label as_label;
 
     static final ObservableList<Author> data = FXCollections.observableArrayList();
+    static final ObservableList<Author> raw_data = FXCollections.observableArrayList();
 	@FXML void as_search_action(ActionEvent e) throws SQLException, IOException{
 		Connection conn = DriverManager.getConnection(GlobalVariables.DB_URL, GlobalVariables.USER, GlobalVariables.PASS);
 		Statement stmt = conn.createStatement();
@@ -59,6 +63,23 @@ public class SearchController {
 				data.add(new Author(Integer.parseInt(rs.getString("aid")), rs.getString("name"), rs.getString("affiliation")));
 			}
 			displayAuthors();
+		}
+		conn.close();
+	}
+	
+	@FXML void rs_search_action(ActionEvent e) throws SQLException, IOException
+	{
+		Connection conn = DriverManager.getConnection(GlobalVariables.DB_URL, GlobalVariables.USER, GlobalVariables.PASS);
+		Statement stmt = conn.createStatement();
+		stmt.executeQuery("USE dbmsProject;");
+		String rs_query_str = rs_query.getText();
+		ResultSet rs = stmt.executeQuery(rs_query_str);
+		while(rs.next())
+		{
+			int cols = rs.getMetaData().getColumnCount();
+			for(int i = 0;i < cols;i++)
+				System.out.print(rs.getString(i + 1) + " ");
+			System.out.print("\n");
 		}
 		conn.close();
 	}

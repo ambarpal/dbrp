@@ -121,7 +121,7 @@ public class LoginController {
 				if (!rs.next()) stmt.executeUpdate("CREATE TABLE keyword (kid INTEGER PRIMARY KEY, word VARCHAR(40));");
 
 				rs = conn.getMetaData().getTables("dbmsProject", null, "conference", null);
-				if (!rs.next()) stmt.executeUpdate("CREATE TABLE conference (cid INTEGER PRIMARY KEY, name VARCHAR(400), date VARCHAR(400));");
+				if (!rs.next()) stmt.executeUpdate("CREATE TABLE conference (cid INTEGER PRIMARY KEY, name VARCHAR(400), cdate VARCHAR(400));");
 
 				rs = conn.getMetaData().getTables("dbmsProject", null, "author", null);
 				if (!rs.next()) stmt.executeUpdate("CREATE TABLE author (aid INTEGER PRIMARY KEY, name VARCHAR(400), affiliation VARCHAR(400));");
@@ -143,7 +143,7 @@ public class LoginController {
 			}
 			else
 			{
-				login_prompt.setText("Incorrect username/password");
+				login_prompt.setText("Invalid credentials");
 				login_prompt.setTextFill(Color.RED);
 			}
 		}
@@ -206,7 +206,7 @@ public class LoginController {
 				if (!rs.next()) stmt.executeUpdate("CREATE TABLE keyword (kid INTEGER PRIMARY KEY, word VARCHAR(40));");
 
 				rs = conn.getMetaData().getTables("dbmsProject", null, "conference", null);
-				if (!rs.next()) stmt.executeUpdate("CREATE TABLE conference (cid INTEGER PRIMARY KEY, name VARCHAR(400), date DATE);");
+				if (!rs.next()) stmt.executeUpdate("CREATE TABLE conference (cid INTEGER PRIMARY KEY, name VARCHAR(400), cdate VARCHAR(400));");
 
 				rs = conn.getMetaData().getTables("dbmsProject", null, "author", null);
 				if (!rs.next()) stmt.executeUpdate("CREATE TABLE author (aid INTEGER PRIMARY KEY, name VARCHAR(400), affiliation VARCHAR(400));");

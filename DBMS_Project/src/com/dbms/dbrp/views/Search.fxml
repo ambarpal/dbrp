@@ -78,7 +78,7 @@
                         <TextArea fx:id="rs_query" prefHeight="63.0" prefWidth="846.0" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
-                  <Button layoutX="236.0" layoutY="177.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="505.0" text="Submit" />
+                  <Button fx:id="raw_search" layoutX="236.0" layoutY="177.0" mnemonicParsing="false" onAction="#rs_search_action" prefHeight="52.0" prefWidth="505.0" text="Submit" />
                </children>
             </AnchorPane>
         </content>
