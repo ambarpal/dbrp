@@ -85,5 +85,21 @@
             </AnchorPane>
         </content>
       </Tab>
+      <Tab text="Typical Searches">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="complex_q1" layoutX="19.0" layoutY="22.0" mnemonicParsing="false" onAction="#complex_action1" prefHeight="26.0" prefWidth="956.0" text="Show all authors having more than 2 papers" />
+                  <Button layoutX="17.0" layoutY="67.0" mnemonicParsing="false" onAction="#complex_action2" prefHeight="26.0" prefWidth="956.0" text="Select all authors which have at least 10 citations" />
+                  <Button layoutX="15.0" layoutY="117.0" mnemonicParsing="false" onAction="#complex_action3" prefHeight="26.0" prefWidth="956.0" text="Select all papers having at least 2 authors" />
+                  <Button layoutX="15.0" layoutY="166.0" mnemonicParsing="false" onAction="#complex_action4" prefHeight="26.0" prefWidth="881.0" text="Select all authors who have published a paper in conference" />
+                  <Button layoutX="15.0" layoutY="218.0" mnemonicParsing="false" onAction="#complex_action5" prefHeight="26.0" prefWidth="881.0" text="Select all papers which have cited a paper in conference" />
+                  <TextArea fx:id="cq_res" layoutX="24.0" layoutY="270.0" prefHeight="255.0" prefWidth="948.0" />
+                  <TextField fx:id="confQ" layoutX="917.0" layoutY="166.0" prefHeight="26.0" prefWidth="36.0" />
+                  <TextField fx:id="confQ2" layoutX="916.0" layoutY="216.0" prefHeight="26.0" prefWidth="36.0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
   </tabs>
 </TabPane>

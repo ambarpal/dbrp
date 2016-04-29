@@ -42,7 +42,11 @@ public class SearchController {
 	@FXML Label alabel;
 	@FXML Label plabel;
 	@FXML TextArea res;
-
+	@FXML TextArea cq_res;
+	@FXML Button complex_q1;
+	@FXML TextField confQ;
+	@FXML TextField confQ2;
+	
     static final ObservableList<Author> data = FXCollections.observableArrayList();
     static final ObservableList<Author> raw_data = FXCollections.observableArrayList();
 	@FXML void as_search_action(ActionEvent e) throws SQLException, IOException{
@@ -139,6 +143,60 @@ public class SearchController {
 		}
 	}
 	
+	void executeComplexQuery() throws SQLException{
+		cq_res.setVisible(true);
+		cq_res.textProperty().addListener(new ChangeListener<Object>() {
+		    @Override
+		    public void changed(ObservableValue<?> observable, Object oldValue,
+		            Object newValue) {
+		        cq_res.setScrollTop(Double.MAX_VALUE);
+		    }
+		});
+		Connection conn = DriverManager.getConnection(GlobalVariables.DB_URL, GlobalVariables.USER, GlobalVariables.PASS);
+		Statement stmt = conn.createStatement();
+		stmt.executeQuery("USE dbmsProject;");
+		String rs_query_str = rs_query.getText();
+		ResultSet rs = stmt.executeQuery(rs_query_str);
+		String resString = "";
+		resString += "\t\t\t";
+		for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++)
+			resString += rs.getMetaData().getColumnName(i).toString() + "\t\t\t";
+		resString += "\n";
+		Integer lineNo = 1;
+		while(rs.next())
+		{
+			int cols = rs.getMetaData().getColumnCount();
+			resString += lineNo.toString() + "\t\t\t";
+			lineNo += 1;
+			for(int i = 0;i < cols; i++)
+				resString += rs.getString(i + 1) + "\t\t\t";
+			resString += "\n";
+		}
+		cq_res.setText(resString);
+		cq_res.appendText("");
+		conn.close();
+	}
+	@FXML void complex_action1(ActionEvent e) throws SQLException{
+		rs_query.setText("select ath.name from author as ath where (select count(*) as c from author natural join isAuthorOf where author.aid = ath.aid) >= 2;");
+		executeComplexQuery();
+	}
+	@FXML void complex_action2(ActionEvent e) throws SQLException{
+		rs_query.setText("select name, title from author natural join isAuthorOf natural join papers where citationcount >= 10;");
+		executeComplexQuery();
+	}
+	@FXML void complex_action3(ActionEvent e) throws SQLException{
+		rs_query.setText("select distinct p.title from papers as p where (select count(*) from author natural join isAuthorOf natural join papers where papers.pid = p.pid) >= 2;");
+		executeComplexQuery();
+	}
+	@FXML void complex_action4(ActionEvent e) throws SQLException{
+		System.out.println(confQ.getText());
+		rs_query.setText("select ath.name from author as ath where ath.aid in (select aid from papers natural join isAuthorOf natural join conference authors natural join isPublishedIn where cid = "+ confQ.getText() + ");");
+		executeComplexQuery();
+	}
+	@FXML void complex_action5(ActionEvent e) throws SQLException{
+		rs_query.setText("select title from papers where pid in (select p1_pid from isCitationOf where p2_pid in (select distinct pid from papers natural join isAuthorOf natural join conference authors natural join isPublishedIn where cid = " + confQ2.getText() + "));");
+		executeComplexQuery();
+	}
 	void displayAuthors() throws IOException {
 		
 		AnchorPane a = (AnchorPane)FXMLLoader.load(Main.class.getResource("views/SearchResults.fxml"));
