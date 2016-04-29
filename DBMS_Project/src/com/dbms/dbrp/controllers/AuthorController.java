@@ -11,6 +11,7 @@ import com.dbms.dbrp.utilities.IDGenerator;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
@@ -29,12 +30,14 @@ public class AuthorController {
 			if(rs.getInt("count") == 0)
 			{
 				alabel.setText("Author successfully added");
+				alabel.setAlignment(Pos.CENTER);
 				alabel.setTextFill(Color.GREEN);
 				stmt.executeUpdate("INSERT INTO author (aid, name, affiliation) VALUES (" + IDGenerator.getAuthorCounter() + ",'" + author_name.getText() + "','" + author_affiliation.getText() + "');");
 			}
 			else
 			{
 				alabel.setText("Author with same affiliation already exists");
+				alabel.setAlignment(Pos.CENTER);
 				alabel.setTextFill(Color.RED);
 			}
 		}

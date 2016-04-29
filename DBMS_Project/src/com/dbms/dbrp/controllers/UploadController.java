@@ -20,6 +20,7 @@ import com.dbms.dbrp.utilities.IDGenerator;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -106,14 +107,6 @@ public class UploadController {
 	}
 	@FXML void uploadPaper(ActionEvent e) throws IOException, SQLException
 	{
-		System.out.println(conn.toString());
-		// Begin To Delete
-    	title_u.setText("ASDJFHDSAHfkahsdjfhsdakjhfjasdkjfhakdjsgfkdakjs");
-    	authors_u.setText("1,2");
-    	citations_u.setText("3,4,5");
-    	conference_u.setText("10");
-    	// End To Delete
-
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Open paper");
 		BufferedReader b = new BufferedReader(new FileReader("data/counter"));
@@ -127,11 +120,13 @@ public class UploadController {
 				isUploaded = true;
 				System.out.println(isUploaded);
 				uploadLabel.setText("PDF uploaded");
+				uploadLabel.setAlignment(Pos.CENTER);
 				uploadLabel.setTextFill(Color.GREEN);
 			}
 			else
 			{
 				uploadLabel.setText("Please choose a PDF file");
+				uploadLabel.setAlignment(Pos.CENTER);
 				uploadLabel.setTextFill(Color.RED);
 			}
 		}
@@ -153,10 +148,12 @@ public class UploadController {
 		if(flag2)
 		{
 			uploadLabel.setText("Enter all fields before submitting");
+			uploadLabel.setAlignment(Pos.CENTER);
 			uploadLabel.setTextFill(Color.RED);
 		}
 		else if (!isUploaded){
 			uploadLabel.setText("You need to submit a pdf");
+			uploadLabel.setAlignment(Pos.CENTER);
 			uploadLabel.setTextFill(Color.RED);	
 		}
 		else

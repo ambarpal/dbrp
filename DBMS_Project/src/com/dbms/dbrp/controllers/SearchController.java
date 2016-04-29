@@ -19,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -34,7 +35,6 @@ public class SearchController {
 	@FXML TextField as_affiliation;
 	@FXML TextField ps_author;
 	@FXML TextField ps_title;
-	@FXML TextField ps_keywords;
 	@FXML Button as_search;
 	@FXML Button raw_search;
 	@FXML Button search;
@@ -48,7 +48,7 @@ public class SearchController {
 	@FXML TextField confQ2;
 	
     static final ObservableList<Author> data = FXCollections.observableArrayList();
-    static final ObservableList<Author> raw_data = FXCollections.observableArrayList();
+    static final ObservableList<Paper> paper_data = FXCollections.observableArrayList();
 	@FXML void as_search_action(ActionEvent e) throws SQLException, IOException{
 		Connection conn = DriverManager.getConnection(GlobalVariables.DB_URL, GlobalVariables.USER, GlobalVariables.PASS);
 		Statement stmt = conn.createStatement();
@@ -59,6 +59,7 @@ public class SearchController {
 		if(authorname.length() == 0 && affiliationname.length() == 0)
 		{
 			as_label.setText("Enter at least one search field");
+			as_label.setAlignment(Pos.CENTER);
 			as_label.setTextFill(Color.RED);
 		}
 		else
@@ -113,14 +114,14 @@ public class SearchController {
 		conn.close();
 	}
 	
-	@FXML void ps_search_action(ActionEvent e) throws SQLException
+	@FXML void ps_search_action(ActionEvent e) throws SQLException, IOException
 	{
-		String author = ps_author.getText();
+		String paperid = ps_author.getText();
 		String title = ps_title.getText();
-		String[] keywords = ps_keywords.getText().split(" ");
-		if(author.length() == 0 && title.length() == 0 && keywords.length == 0)
+		if(paperid.length() == 0 && title.length() == 0)
 		{
 			plabel.setText("Enter at least one field");
+			plabel.setAlignment(Pos.CENTER);
 			plabel.setTextFill(Color.RED);
 		}
 		else
@@ -129,15 +130,29 @@ public class SearchController {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = null;
 			stmt.executeQuery("USE dbmsProject;");
-			if(author.length() != 0)
+			Boolean flag=false;
+			for(int i=0;i<paperid.length();i++)
+				if(paperid.charAt(i)<'0' || paperid.charAt(i)>'9')
+					flag=true;
+			if(flag)
 			{
-				if(author.matches("0-9")){
-					rs = stmt.executeQuery("SELECT * from author where aid = " + author + ";");
-				}
+				plabel.setText("Author ID should be numeric");
+				plabel.setAlignment(Pos.CENTER);
+				plabel.setTextFill(Color.RED);
+			}
+			else
+			{
+				plabel.setText("");
+				if(paperid.length() != 0 && title.length() != 0)
+					rs = stmt.executeQuery("SELECT * from papers where pid = " + paperid + " and title like '%" + title +"%';");
+				else if(paperid.length() != 0)
+					rs = stmt.executeQuery("SELECT * from papers where pid = " + paperid + ";");
 				else
-				{
-					rs = stmt.executeQuery("SELECT * from author where name like '%" + author + "%';");
-				}
+					rs = stmt.executeQuery("SELECT * from papers where title like '%" + paperid + "%';");
+				paper_data.clear();
+				while(rs.next())
+					paper_data.add(new Paper(Integer.parseInt(rs.getString("pid")), rs.getString("title")));
+				displayPapers();
 			}
 			conn.close();
 		}
@@ -198,8 +213,17 @@ public class SearchController {
 		executeComplexQuery();
 	}
 	void displayAuthors() throws IOException {
-		
 		AnchorPane a = (AnchorPane)FXMLLoader.load(Main.class.getResource("views/SearchResults.fxml"));
+		Scene s = new Scene(a);
+		Stage app_stage = new Stage();
+		app_stage.hide();
+		app_stage.setTitle("Query Results");
+		app_stage.setScene(s);
+		app_stage.show();
+	}
+	
+	void displayPapers() throws IOException {
+		AnchorPane a = (AnchorPane)FXMLLoader.load(Main.class.getResource("views/PaperResults.fxml"));
 		Scene s = new Scene(a);
 		Stage app_stage = new Stage();
 		app_stage.hide();
@@ -225,5 +249,19 @@ public class SearchController {
         public void setName(String name_) { name.set(name_);}
         public String getAffiliation(){ return affiliation.get();}
         public void setAffiliation(String affiliation_) {affiliation.set(affiliation_);}
+    }
+    
+    public static class Paper
+    {
+    	private SimpleIntegerProperty pid;
+		private final SimpleStringProperty title;
+        private Paper(int pid, String title) {
+        	this.pid = new SimpleIntegerProperty(pid);
+            this.title = new SimpleStringProperty(title);
+        }
+        public Integer getPid() { return pid.get();}
+		public void setPid(int pid_) { pid.set(pid_); }
+        public String getTitle() {return title.get();}
+        public void setTitle(String title_) { title.set(title_);}
     }
 }

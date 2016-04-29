@@ -19,7 +19,6 @@ public class SearchResultsController implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
 		aidColumn.setCellValueFactory(new PropertyValueFactory<TableView<Author>,String>("aid"));
 		nameColumn.setCellValueFactory(new PropertyValueFactory<TableView<Author>,String>("name"));
 		affiliationColumn.setCellValueFactory(new PropertyValueFactory<TableView<Author>,String>("affiliation"));
